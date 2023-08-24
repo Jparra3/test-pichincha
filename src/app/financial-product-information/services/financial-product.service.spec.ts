@@ -1,23 +1,33 @@
 import { TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
 import { FinancialProductService } from './financial-product.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { of, throwError } from 'rxjs';
 import { Product } from '../models/product';
+import { environment } from 'src/environments/environment';
 
 describe('FinancialProductService', () => {
   let service: FinancialProductService;
-  let httpClientSpy: { post: jasmine.Spy };
+  let httpClientSpy: {
+    get: jasmine.Spy ; post: jasmine.Spy
+};
+  let httpMock: HttpTestingController;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports:[
         HttpClientTestingModule
-      ]
+      ],
+      providers: [FinancialProductService]
     });
-    httpClientSpy = jasmine.createSpyObj('HttpClient', ['post']);
+    httpClientSpy = jasmine.createSpyObj('HttpClient', ['post', 'get']);
     service = new FinancialProductService(httpClientSpy as any);
+    httpMock = TestBed.inject(HttpTestingController);
+  });
+
+  afterEach(() => {
+    httpMock.verify(); // Verifica que no haya solicitudes HTTP pendientes
   });
 
   it('should be created', () => {
@@ -53,5 +63,18 @@ describe('FinancialProductService', () => {
         }
       )
 
-  })
+  });
+
+  it('debe recuperar productos a través de la solicitud GET', () => {
+    const mockProducts: Product[] = [
+    ];
+
+    httpClientSpy.get.and.returnValue(of(mockProducts));
+
+    service.search().subscribe((products: Product[]) => {
+      expect(products).toEqual(mockProducts);
+    });
+
+  });
+
 });

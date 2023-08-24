@@ -2,7 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UpdateProduct } from '../../models/update-product';
 import { FinancialProductService } from '../../services/financial-product.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ResponseApi } from '../../models/response-api';
+import { ResponseServiceService } from '../../services/response-service.service';
 
 @Component({
   selector: 'app-product-information-update',
@@ -22,6 +24,8 @@ export class ProductInformationUpdateComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private financialProductService: FinancialProductService,
+    private responseServiceService: ResponseServiceService,
+    private router: Router,
     private route: ActivatedRoute
   ){
 
@@ -37,6 +41,22 @@ export class ProductInformationUpdateComponent implements OnInit {
     const tmpDto = this.financialProductService.getData();
     if(tmpDto != undefined){
       this.dto = new UpdateProduct(tmpDto);
+
+      if(tmpDto.name != undefined){
+        this.dto.name = tmpDto.name;
+        this.form.get('name')?.setValue(this.dto.name);
+      }
+
+      if(tmpDto.description != undefined){
+        this.dto.description = tmpDto.description;
+        this.form.get('description')?.setValue(this.dto.description);
+      }
+
+      if(tmpDto.logo != undefined){
+        this.dto.logo = tmpDto.logo;
+        this.form.get('logo')?.setValue(this.dto.logo);
+      }
+
       if(tmpDto.date_release != undefined){
         this.dto.date_release = this.getDate(new Date(tmpDto.date_release));
         this.form.get('dateRelease')?.setValue(this.dto.date_release);
@@ -77,8 +97,12 @@ export class ProductInformationUpdateComponent implements OnInit {
     this.isSave = undefined;
   }
 
+  cancel(){
+    this.router.navigate(['/financial-product-information']);
+  }
+
   update(){
-    this.sendSave = true;
+    this.sendSave = false;
     const formValue = this.form.getRawValue();
     this.dto.id =  formValue.id;
     this.dto.name =  formValue.name;
@@ -91,16 +115,20 @@ export class ProductInformationUpdateComponent implements OnInit {
     const argRelease = (this.form.get('dateRelease')?.value).split('/');
     this.dto.date_release = `${argRelease[2]}-${argRelease[1]}-${argRelease[0]}`;
 
-    this.financialProductService.create(this.dto).subscribe(
+    this.financialProductService.update(this.dto).subscribe(
       {
         next:(response: UpdateProduct)=>{
+          this.sendSave = true;
           this.isSave = true;
           this.message = 'producto actualizado con exito';
+
+          this.responseServiceService.responseApi.next(new ResponseApi({state: true, message: this.message}));
+          this.router.navigate(['/financial-product-information']);
         },
         error: (e)=>{
+          this.sendSave = true;
           this.isSave = false;
-          this.message = 'Ocurrio un error';
-          console.log('e', e);
+          this.message = `Ocurrio un error ${e.error}`;
         }
       }
     );

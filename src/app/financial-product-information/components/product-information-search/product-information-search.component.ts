@@ -3,6 +3,9 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { Product } from '../../models/product';
 import { Router } from '@angular/router';
 import { FinancialProductService } from '../../services/financial-product.service';
+import { ResponseServiceService } from '../../services/response-service.service';
+import { ResponseApi } from '../../models/response-api';
+
 
 @Component({
   selector: 'app-product-information-search',
@@ -16,37 +19,20 @@ export class ProductInformationSearchComponent implements OnInit {
   options = [5, 10, 15, 20, 25, 50, 100];
   selectedOption: number = 5;
 
-  /* products: Product[] = [new Product({
-    id: 'trj-crd',
-    name: 'Tarjetas de Crédito',
-    description: 'Tarjeta de consumo bajo la modalidad de crédito',
-    logo: 'https://www.visa.com.ec/dam/VCOM/regional/lac/SPA/Default/Pay%20With%20Visa/Tarjetas/visa-signature-400x225.jpg',
-    date_release: '2023-08-24T15:30:00',
-    date_revision: '2024-08-24T15:30:00'
-  })]; */
   products: Product[] = [];
+  originalProducts: Product[] = [];
+
   productsPerPage = 5;
   currentPage = 1;
 
+  responseApi:ResponseApi = new ResponseApi({});
+
   constructor(private fb: FormBuilder,
     private financialProductService: FinancialProductService,
+    private responseServiceService: ResponseServiceService,
     private router: Router
     ){
     this.searchForm = this.createForm();
-  }
-
-  ngOnInit(): void {
-    this.getProducts();
-  }
-
-  getProducts(){
-    this.financialProductService.search().subscribe((response: Product[])=>{
-      this.products = response;
-    });
-  }
-
-  onOptionChange(event: any) {
-    this.selectedOption = parseInt(event.target.value, 10);
   }
 
   createForm(): FormGroup {
@@ -55,13 +41,51 @@ export class ProductInformationSearchComponent implements OnInit {
     });
   }
 
+  ngOnInit(): void {
+    this.getProducts();
+    this.responseServiceService.getResponseApi().subscribe((response: ResponseApi)=>{
+      this.responseApi = response;
+      setTimeout(()=>{
+        this.responseApi.state = false;
+      }, 3000)
+    });
+  }
+
+  getProducts(){
+    this.financialProductService.search().subscribe((response: Product[])=>{
+      this.products = response;
+      this.originalProducts = response;
+      this.productsPerPage = this.selectedOption;
+    });
+  }
+
+  onNameInputChange() {
+    const searchName = this.searchForm.get('name')!.value.trim().toLowerCase();
+    if (searchName === '') {
+      this.products = this.originalProducts; // Reset to original data if the search name is empty
+    } else {
+      this.products = this.originalProducts.filter(product =>
+        product.name!.toLowerCase().includes(searchName)
+      );
+    }
+  }
+
+  onOptionChange(event: any) {
+    this.selectedOption = parseInt(event.target.value, 10);
+    this.currentPage = 1; // Reset to first page when changing options
+    this.productsPerPage = this.selectedOption; // Update the products per page
+  }
+
+
+
   get productsToDisplay(): Product[] {
     const startIndex = (this.currentPage - 1) * this.productsPerPage;
-    return this.products.slice(startIndex, startIndex + this.productsPerPage);
+    const endIndex = startIndex + this.productsPerPage;
+    return this.products.slice(startIndex, endIndex);
   }
 
   get totalPages(): number {
-    return Math.ceil(this.products.length / this.productsPerPage);
+    return Math.ceil(this.products.length / this.selectedOption);
   }
 
   newProduct(e?: SubmitEvent): void{
@@ -70,12 +94,6 @@ export class ProductInformationSearchComponent implements OnInit {
   }
 
   toggleMenu(product: any) {
-
-    /* this.products.forEach(data => {
-      if(data.id != product.id){
-        data.showMenu = false;
-      }
-    }); */
     this.products = this.products.map(data => ({
       ...data,
       showMenu: data.id === product.id ? !data.showMenu : false
@@ -90,6 +108,8 @@ export class ProductInformationSearchComponent implements OnInit {
   }
 
   deleteProduct(product: any) {
+    this.financialProductService.setData(product);
+
     this.router.navigate(['/financial-product-information/delete/'+product.id]);
   }
 

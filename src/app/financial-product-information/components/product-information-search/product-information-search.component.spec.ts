@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { ProductInformationSearchComponent } from './product-information-search.component';
 
+
 describe('ProductInformationSearchComponent', () => {
   let component: ProductInformationSearchComponent;
   let fixture: ComponentFixture<ProductInformationSearchComponent>;
@@ -15,7 +16,8 @@ describe('ProductInformationSearchComponent', () => {
         FormsModule,
         HttpClientTestingModule
       ],
-      declarations: [ ProductInformationSearchComponent ]
+      declarations: [ ProductInformationSearchComponent ],
+
     })
     .compileComponents();
 

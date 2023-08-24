@@ -3,7 +3,6 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ProductInformationCreateComponent } from './product-information-create.component';
 import { of, throwError } from 'rxjs';
-
 import { FinancialProductService } from '../../services/financial-product.service'; // Importa el servicio
 
 

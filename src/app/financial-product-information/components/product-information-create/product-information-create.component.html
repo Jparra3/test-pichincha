@@ -17,6 +17,7 @@
                 (blur)="validateId()">
               <div class="error-message" *ngIf="form.get('id')?.invalid && form.get('id')?.touched">ID no válido</div>
               <div class="error-message" *ngIf="form.controls['id'].hasError('required') && form.get('id')?.touched">Este campo es requerido</div>
+              <!-- <div class="error-message" *ngIf="form.controls['id'].hasError('existId') && form.get('id')?.touched">ID ya está registrado</div> -->
             </div>
             <div class="col">
               <label for="name">Nombre</label>

@@ -3,11 +3,17 @@
     <img src="../../assets/images/banco_pichincha_logo.png" alt="arrow" loading="lazy">
   </div>
 
+  <div class="container-message" *ngIf="responseApi.state">
+    <div class="custom-alert" [ngClass]="{'custom-alert-success': responseApi.state, 'custom-alert-danger': !responseApi.state }">
+      {{responseApi.message}}
+    </div>
+  </div>
+
   <div class="container-search">
     <div>
       <form autocomplete="off" [formGroup]="searchForm">
         <div class="form-search">
-          <input formControlName="name" class="custom-input" type="text" placeholder="Search...">
+          <input formControlName="name" class="custom-input" type="text" placeholder="Search..." (input)="onNameInputChange()">
           <div>
             <button class="success-button" (click)="newProduct()">Agregar</button>
           </div>
@@ -53,7 +59,7 @@
       </table>
       <div class="result-table">
         <div>
-          <label>{{productsToDisplay.length}} Resultado(s)</label>
+          <label>{{products.length}} Resultado(s)</label>
         </div>
         <div class="select-container">
           <select id="selectOptions" (change)="onOptionChange($event)">

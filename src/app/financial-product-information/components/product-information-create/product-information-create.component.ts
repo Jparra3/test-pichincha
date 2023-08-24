@@ -2,6 +2,9 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CrerateProduct } from '../../models/create-product';
 import { FinancialProductService } from '../../services/financial-product.service';
+import { ResponseServiceService } from '../../services/response-service.service';
+import { ResponseApi } from '../../models/response-api';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-product-information-create',
@@ -19,7 +22,9 @@ export class ProductInformationCreateComponent {
 
   constructor(
     private fb: FormBuilder,
-    private financialProductService: FinancialProductService
+    private financialProductService: FinancialProductService,
+    private responseServiceService: ResponseServiceService,
+    private router: Router
   ){
 
     this.dto = new CrerateProduct({});
@@ -68,12 +73,14 @@ export class ProductInformationCreateComponent {
       {
         next:(response: CrerateProduct)=>{
           this.isSave = true;
-          this.message = 'producto guardado con exito';
+          // this.message = 'Producto guardado con exito';
+
+          this.responseServiceService.responseApi.next(new ResponseApi({state: true, message: 'Producto guardado con exito'}));
+          this.router.navigate(['/financial-product-information']);
         },
         error: (e)=>{
           this.isSave = false;
-          this.message = 'Ocurrio un error';
-          console.log('e', e);
+          this.message = `Ocurrio un error: ${e.error}`;
         }
       }
     );
@@ -84,10 +91,10 @@ export class ProductInformationCreateComponent {
     if(this.form.controls['id'].valid){
       this.financialProductService.verificationId(this.form.controls['id'].value).subscribe((response: Boolean)=>{
         if(response){
-          this.form.controls['id']!.disable();
-        }else{
-          this.form.controls['id'].setErrors({ invalid: true });
+          this.form.controls['id'].setErrors({ existId: true });
           this.form.controls['id'].markAsTouched();
+        }else{
+          this.form.controls['id']!.disable();
         }
       })
     }
