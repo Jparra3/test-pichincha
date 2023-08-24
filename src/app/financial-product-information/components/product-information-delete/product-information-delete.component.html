@@ -1,1 +1,56 @@
-<p>product-information-delete works!</p>
+<div class="image-logo">
+  <img src="../../assets/images/banco_pichincha_logo.png" alt="arrow" loading="lazy">
+</div>
+
+<div class="container">
+  <div class="container-create">
+    <div class="container-form">
+
+      <h1 class="title">Eliminar registro</h1>
+      <hr>
+      <form [formGroup]="form" autocomplete="off">
+        <div class="row">
+          <div class="col">
+            <label for="id">ID</label>
+            <input formControlName="id"class="custom-input" type="text" placeholder="Id">
+          </div>
+          <!-- <div class="col">
+            <label for="name">Nombre</label>
+            <input formControlName="name" class="custom-input" type="text" placeholder="Nombre">
+          </div> -->
+        </div>
+        <!-- <div class="row">
+          <div class="col">
+            <label for="description">Descripción</label>
+            <input formControlName="description" class="custom-input" type="text" placeholder="Descripción">
+          </div>
+          <div class="col">
+            <label for="logo">Logo</label>
+            <input formControlName="logo" class="custom-input" type="text" placeholder="Logo">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <label for="dateRelease">Fecha Liberación</label>
+            <input formControlName="dateRelease" class="custom-input" type="text" placeholder="dd/mm/aaaa">
+          </div>
+          <div class="col">
+            <label for="dateRevision">Fecha Revisión</label>
+            <input formControlName="dateRevision" class="custom-input" type="text" placeholder="Fecha Revisión">
+          </div>
+        </div>-->
+        <div class="action-buttons">
+          <button class="reload-button" (click)="cancel()">Cancelar</button>
+          <button class="success-button" (click)="deleteProduct()" [disabled]="disabledBtnDelete">Eliminar</button>
+        </div>
+      </form>
+
+      <div *ngIf="sendSave && isSave != undefined">
+        <div class="custom-alert" [ngClass]="{'custom-alert-success': isSave, 'custom-alert-danger': !isSave }">
+          {{message}}
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

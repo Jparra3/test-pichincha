@@ -1,4 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { ProductInformationSearchComponent } from './product-information-search.component';
 
@@ -8,6 +10,11 @@ describe('ProductInformationSearchComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
+      imports: [
+        ReactiveFormsModule,
+        FormsModule,
+        HttpClientTestingModule
+      ],
       declarations: [ ProductInformationSearchComponent ]
     })
     .compileComponents();
@@ -18,6 +25,8 @@ describe('ProductInformationSearchComponent', () => {
   });
 
   it('should create', () => {
-    expect(component).toBeTruthy();
+    const fixture = TestBed.createComponent(ProductInformationSearchComponent);
+    const app = fixture.componentInstance
+    expect(app).toBeTruthy();
   });
 });

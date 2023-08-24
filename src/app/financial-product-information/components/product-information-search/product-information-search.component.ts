@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Product } from '../../models/product';
 import { Router } from '@angular/router';
+import { FinancialProductService } from '../../services/financial-product.service';
 
 @Component({
   selector: 'app-product-information-search',
@@ -10,19 +11,38 @@ import { Router } from '@angular/router';
 })
 export class ProductInformationSearchComponent implements OnInit {
 
-
   searchForm: FormGroup;
 
   options = [5, 10, 15, 20, 25, 50, 100];
   selectedOption: number = 5;
 
+  /* products: Product[] = [new Product({
+    id: 'trj-crd',
+    name: 'Tarjetas de Crédito',
+    description: 'Tarjeta de consumo bajo la modalidad de crédito',
+    logo: 'https://www.visa.com.ec/dam/VCOM/regional/lac/SPA/Default/Pay%20With%20Visa/Tarjetas/visa-signature-400x225.jpg',
+    date_release: '2023-08-24T15:30:00',
+    date_revision: '2024-08-24T15:30:00'
+  })]; */
+  products: Product[] = [];
+  productsPerPage = 5;
+  currentPage = 1;
+
   constructor(private fb: FormBuilder,
-    private router: Router){
+    private financialProductService: FinancialProductService,
+    private router: Router
+    ){
     this.searchForm = this.createForm();
   }
 
   ngOnInit(): void {
+    this.getProducts();
+  }
 
+  getProducts(){
+    this.financialProductService.search().subscribe((response: Product[])=>{
+      this.products = response;
+    });
   }
 
   onOptionChange(event: any) {
@@ -35,26 +55,6 @@ export class ProductInformationSearchComponent implements OnInit {
     });
   }
 
-  products: Product[] = [
-    new Product({
-      id: '15',
-      name: 'AAA',
-      description: 'asdasdbva sdjsabdas da ',
-      logo: 'asdadsad',
-      data_release: 'asdasd',
-      data_revision: 'asdadasd'
-    }),
-    new Product({
-      id: '16',
-      name: 'AAA',
-      description: 'asdasdbva sdjsabdas da ',
-      logo: 'asdadsad',
-      data_release: 'asdasd',
-      data_revision: 'asdadasd'
-    })];
-  productsPerPage = 5;
-  currentPage = 1;
-
   get productsToDisplay(): Product[] {
     const startIndex = (this.currentPage - 1) * this.productsPerPage;
     return this.products.slice(startIndex, startIndex + this.productsPerPage);
@@ -62,21 +62,6 @@ export class ProductInformationSearchComponent implements OnInit {
 
   get totalPages(): number {
     return Math.ceil(this.products.length / this.productsPerPage);
-  }
-
-  previousPage() {
-    if (this.currentPage > 1) {
-      this.currentPage--;
-    }
-  }
-
-  nextPage() {
-    if (this.currentPage < this.totalPages) {
-      this.currentPage++;
-    }
-  }
-
-  search(): void{
   }
 
   newProduct(e?: SubmitEvent): void{
@@ -99,11 +84,13 @@ export class ProductInformationSearchComponent implements OnInit {
   }
 
   editProduct(product: any) {
-    // Lógica para editar el producto
+    this.financialProductService.setData(product);
+
+    this.router.navigate(['/financial-product-information/update/'+product.id]);
   }
 
   deleteProduct(product: any) {
-    // Lógica para eliminar el producto
+    this.router.navigate(['/financial-product-information/delete/'+product.id]);
   }
 
 }

@@ -1,11 +1,10 @@
-export class Product{
+export class UpdateProduct{
   public id: string;
   public name: string | undefined;
   public description: string | undefined;
   public logo: string | undefined;
   public date_release: string | undefined;
   public date_revision: string | undefined;
-  public showMenu: boolean;
 
   constructor(_parameters: any) {
     this.id = (_parameters?.id != null ? _parameters.id: undefined);
@@ -14,7 +13,6 @@ export class Product{
     this.logo = (_parameters?.logo != null ? _parameters.logo: undefined);
     this.date_release = (_parameters?.date_release != null ? _parameters.date_release: undefined);
     this.date_revision = (_parameters?.date_revision != null ? _parameters.date_revision: undefined);
-    this.showMenu = (_parameters?.showMenu != null ? _parameters.showMenu: false);
   }
 
 }

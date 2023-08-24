@@ -1,1 +1,74 @@
-<p>product-information-create works!</p>
+  <div class="image-logo">
+    <img src="../../assets/images/banco_pichincha_logo.png" alt="arrow" loading="lazy">
+  </div>
+
+  <div class="container">
+    <div class="container-create">
+      <div class="container-form">
+
+        <h1 class="title">Formulario de registro</h1>
+        <hr>
+        <form [formGroup]="form" autocomplete="off">
+          <div class="row">
+            <div class="col">
+              <label for="id">ID</label>
+              <input formControlName="id"
+                class="custom-input" type="text" placeholder="Id"
+                (blur)="validateId()">
+              <div class="error-message" *ngIf="form.get('id')?.invalid && form.get('id')?.touched">ID no válido</div>
+              <div class="error-message" *ngIf="form.controls['id'].hasError('required') && form.get('id')?.touched">Este campo es requerido</div>
+            </div>
+            <div class="col">
+              <label for="name">Nombre</label>
+              <input formControlName="name" class="custom-input" type="text" placeholder="Nombre">
+              <div class="error-message" *ngIf="form.controls['name'].hasError('required') && form.get('name')?.touched">Este campo es requerido</div>
+              <div class="error-message" *ngIf="form.controls['name'].hasError('minlength') && form.get('name')?.touched">Tamaño mínimo de caracteres no permitido</div>
+              <div class="error-message" *ngIf="form.controls['name'].hasError('maxlength') && form.get('name')?.touched">Excedió el tamaño máximo de caracteres</div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <label for="description">Descripción</label>
+              <input formControlName="description" class="custom-input" type="text" placeholder="Descripción">
+              <div class="error-message" *ngIf="form.controls['description'].hasError('required') && form.get('description')?.touched">Este campo es requerido</div>
+              <div class="error-message" *ngIf="form.controls['description'].hasError('minlength') && form.get('description')?.touched">Tamaño mínimo de caracteres no permitido</div>
+              <div class="error-message" *ngIf="form.controls['description'].hasError('maxlength') && form.get('description')?.touched">Excedió el tamaño máximo de caracteres</div>
+            </div>
+            <div class="col">
+              <label for="logo">Logo</label>
+              <input formControlName="logo" class="custom-input" type="text" placeholder="Logo">
+              <div class="error-message" *ngIf="form.controls['logo'].hasError('required') && form.get('logo')?.touched">Este campo es requerido</div>
+              <div class="error-message" *ngIf="form.controls['logo'].hasError('minlength') && form.get('logo')?.touched">Tamaño mínimo de caracteres no permitido</div>
+              <div class="error-message" *ngIf="form.controls['logo'].hasError('maxlength') && form.get('logo')?.touched">Excedió el tamaño máximo de caracteres</div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <label for="dateRelease">Fecha Liberación</label>
+              <input formControlName="dateRelease"
+                class="custom-input" type="text" placeholder="dd/mm/aaaa"
+                (change)="validateDateRelease()">
+              <div class="error-message" *ngIf="form.get('dateRelease')?.invalid && form.get('dateRelease')?.touched">Fecha no válida</div>
+              <div class="error-message" *ngIf="form.controls['dateRelease'].hasError('required') && form.get('dateRelease')?.touched">Este campo es requerido</div>
+            </div>
+            <div class="col">
+              <label for="dateRevision">Fecha Revisión</label>
+              <input formControlName="dateRevision" class="custom-input" type="text" placeholder="Fecha Revisión">
+              <div class="error-message" *ngIf="form.controls['dateRevision'].hasError('required') && form.get('dateRevision')?.touched">Este campo es requerido</div>
+            </div>
+          </div>
+          <div class="action-buttons">
+            <button class="reload-button" (click)="clearForm()">Reiniciar</button>
+            <button class="success-button" (click)="save()" [disabled]="!form.valid">Agregar</button>
+          </div>
+        </form>
+
+        <div *ngIf="sendSave && isSave != undefined">
+          <div class="custom-alert" [ngClass]="{'custom-alert-success': isSave, 'custom-alert-danger': !isSave }">
+            {{message}}
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>

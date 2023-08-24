@@ -5,7 +5,7 @@
 
   <div class="container-search">
     <div>
-      <form autocomplete="off">
+      <form autocomplete="off" [formGroup]="searchForm">
         <div class="form-search">
           <input formControlName="name" class="custom-input" type="text" placeholder="Search...">
           <div>
@@ -23,16 +23,18 @@
             <th>Descripción</th>
             <th>Fecha de liberación</th>
             <th>Fecha de reestructuración</th>
-            <th>-</th>
+            <th> </th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let product of productsToDisplay">
-            <td>{{ product.logo }}</td>
+            <td>
+              <img class="image-table" [src]="product.logo" alt="images" />
+            </td>
             <td>{{ product.name }}</td>
             <td>{{ product.description }}</td>
-            <td>{{ product.data_release }}</td>
-            <td>{{ product.data_revision }}</td>
+            <td>{{ product.date_release | date:'dd/MM/yyyy'}}</td>
+            <td>{{ product.date_revision | date:'dd/MM/yyyy' }}</td>
             <td>
               <div class="action-menu">
                 <div class="menu-trigger" (click)="toggleMenu(product)">
