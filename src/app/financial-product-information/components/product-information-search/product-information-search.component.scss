@@ -1,0 +1,112 @@
+@import 'src/styles.scss';
+
+.image-logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 50px;
+
+  img {
+    width: 250px;
+  }
+}
+
+.container-search{
+  margin: 25px 50px;
+  background: #F4F6F9;
+  height: 100%;
+  padding: 25px 15px 100px 15px;
+}
+
+.form-table {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 20px 50px 20px;
+  background: #fff;
+  margin-top: 10px;
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+
+    th, td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+
+    th {
+      background-color: #f5f5f5;
+      font-weight: bold;
+    }
+  }
+}
+
+
+.form-search{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.result-table{
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 15px;
+}
+
+
+//menu acciones editar - eliminar
+.action-menu {
+  position: relative;
+  display: inline-block;
+
+  .dot {
+    width: 4px;
+    height: 4px;
+    background-color: #000;
+    border-radius: 50%;
+    margin: 2px 0;
+    display: block;
+  }
+}
+
+.menu.show {
+  display: block;
+}
+
+.menu-trigger {
+  cursor: pointer;
+  padding: 4px;
+}
+
+.menu {
+  position: absolute;
+  display: none;
+  right: 0;
+  top: 100%;
+  background-color: #fff;
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+  padding: 8px;
+  border-radius: 4px;
+  z-index: 1;
+
+  button {
+    display: block;
+    background: none;
+    border: none;
+    padding: 4px 8px;
+    width: 100%;
+    cursor: pointer;
+    text-align: left;
+
+    &:hover {
+      background-color: #f0f0f0;
+    }
+  }
+}

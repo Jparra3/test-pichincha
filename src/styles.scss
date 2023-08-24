@@ -1,1 +1,68 @@
 /* You can add global styles to this file, and also import other style files */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-size: 15px;
+}
+
+:root {
+  --color-company: #efd452;
+}
+
+$input-border-color: #ccc;
+$input-border-radius: 8px;
+$input-padding: 8px;
+
+input.custom-input {
+  border: 1px solid $input-border-color;
+  border-radius: $input-border-radius;
+  padding: $input-padding;
+
+  &:focus {
+    border-color: var(--color-company);
+    outline: none;
+    // box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+  }
+}
+
+.select-container {
+  position: relative;
+  display: inline-block;
+
+  select {
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #555;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+
+    &:focus {
+      outline: 0;
+    }
+  }
+}
+
+.success-button {
+  padding: 15px 20px;
+  font-size: 14px;
+  line-height: 1.42857143;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  cursor: pointer;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  color: #000;
+  background-color: var(--color-company);
+  // border-color: #efd452;
+
+  &:hover,
+  &:focus {
+    color: #685c5c;
+    // background-color: #e2c94e;
+    // border-color: #efd552e3;
+  }
+}

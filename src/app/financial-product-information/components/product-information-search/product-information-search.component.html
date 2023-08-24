@@ -1,0 +1,64 @@
+<div class="container">
+  <div class="image-logo">
+    <img src="../../assets/images/banco_pichincha_logo.png" alt="arrow" loading="lazy">
+  </div>
+
+  <div class="container-search">
+    <div>
+      <form autocomplete="off">
+        <div class="form-search">
+          <input formControlName="name" class="custom-input" type="text" placeholder="Search...">
+          <div>
+            <button class="success-button" (click)="newProduct()">Agregar</button>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="form-table">
+      <table>
+        <thead>
+          <tr>
+            <th>Logo</th>
+            <th>Nombre producto</th>
+            <th>Descripción</th>
+            <th>Fecha de liberación</th>
+            <th>Fecha de reestructuración</th>
+            <th>-</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let product of productsToDisplay">
+            <td>{{ product.logo }}</td>
+            <td>{{ product.name }}</td>
+            <td>{{ product.description }}</td>
+            <td>{{ product.data_release }}</td>
+            <td>{{ product.data_revision }}</td>
+            <td>
+              <div class="action-menu">
+                <div class="menu-trigger" (click)="toggleMenu(product)">
+                  <span class="dot"></span>
+                  <span class="dot"></span>
+                  <span class="dot"></span>
+                </div>
+                <div class="menu" [ngClass]="{'show': product.showMenu}">
+                  <button (click)="editProduct(product)">Editar</button>
+                  <button (click)="deleteProduct(product)">Eliminar</button>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="result-table">
+        <div>
+          <label>{{productsToDisplay.length}} Resultado(s)</label>
+        </div>
+        <div class="select-container">
+          <select id="selectOptions" (change)="onOptionChange($event)">
+            <option *ngFor="let option of options" [value]="option">{{ option }}</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
